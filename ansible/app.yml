@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: cloud-app
+    labels:
+        app: cloud-app
+spec:
+    selector:
+        matchLabels:
+            app: cloud-app
+    template:
+        metadata:
+            labels:
+                app: cloud-app
+        spec:
+            containers:
+              - name: cloud-app
+                image: cemmanuelsr/cloud-app
+                ports:
+                  - containerPort: 8000
+                    name: cloud-app
+                resources: 
+                    limits:
+                        cpu: 500m
+                    requests:
+                        cpu: 200m 
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: cloud-app
+    labels:
+        app: cloud-app
+spec:
+    type: LoadBalancer
+    ports:
+      - port: 8000
+        targetPort: 8000
+    selector:
+        app: cloud-app
+
